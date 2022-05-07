@@ -2,16 +2,23 @@ package com.zhangxin.jarvis;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
+import com.microsoft.azure.cognitiveservices.vision.faceapi.FaceAPI;
+import com.microsoft.azure.cognitiveservices.vision.faceapi.FaceAPIManager;
+import com.microsoft.azure.cognitiveservices.vision.faceapi.models.DetectedFace;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+
+import static com.zhangxin.jarvis.EmotionDetection.detectFaces;
 
 public class pictureTest {
     public static void main(String[] args) throws IOException {
         Webcam webcam = Webcam.getDefault();
-        Dimension[] nonStandardResolutions = new Dimension[] {
+        Dimension[] nonStandardResolutions = new Dimension[]{
                 WebcamResolution.PAL.getSize(),
                 WebcamResolution.HD.getSize(),
                 new Dimension(640, 480),
@@ -24,6 +31,15 @@ public class pictureTest {
         webcam.setCustomViewSizes(nonStandardResolutions);
         webcam.setViewSize(new Dimension(camera_w, camera_h));
         webcam.open();
-        ImageIO.write(webcam.getImage(), "PNG", new File("hello-world.png"));
+        //ImageIO.write(webcam.getImage(), "PNG", new File("hello-world.png"));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(webcam.getImage(), "PNG", baos);
+        byte[] bytes = baos.toByteArray();
+        EmotionDetection emotionDetection = new EmotionDetection();
+        for (DetectedFace face : emotionDetection.detectFaces(bytes)) {
+            System.out.println(face.faceAttributes().emotion().neutral());
+
+        }
+        webcam.close();
     }
 }
