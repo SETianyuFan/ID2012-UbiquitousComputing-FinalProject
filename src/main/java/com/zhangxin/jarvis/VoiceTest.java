@@ -4,7 +4,10 @@ import com.iflytek.cloud.speech.*;
 import com.zhangxin.jarvis.util.DebugLog;
 import com.zhangxin.jarvis.util.JsonParser;
 
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Scanner;
 
 public class VoiceTest {
@@ -106,7 +109,30 @@ public class VoiceTest {
             }else if(strResult.toLowerCase().contains("music")){
                 System.out.println("playing music...");
 
-                System.out.println(pt.getEmotion());
+                try {
+                    switch (pt.getEmotion()){
+                        case "happiness":
+                            browse("https://www.youtube.com/watch?v=ZbZSe6N_BXs&ab_channel=PharrellWilliamsVEVO");
+                        case "sadness":
+                            browse("https://www.youtube.com/watch?v=Jllu94-8PxI&ab_channel=brokxn");
+                        case "disgust":
+                            browse("https://www.youtube.com/watch?v=3clqk2U3T9Y&ab_channel=SandTagious");
+                        case "contempt":
+                            browse("https://www.youtube.com/watch?v=r7qovpFAGrQ&ab_channel=LilNasXVEVO");
+                        case "fear":
+                            browse("https://www.youtube.com/watch?v=m9We2XsVZfc&ab_channel=PrestigeGhost");
+                        case "surprised":
+                            browse("https://www.youtube.com/watch?v=__LU8E6dUsI&list=RDMM&start_radio=1&rv=Y-lI_tgQMMk&ab_channel=AkademiaFilmuiTelewizjiO");
+                        case "anger":
+                            browse("https://www.youtube.com/watch?v=L3wKzyIN1yk&list=RDMM&index=5&ab_channel=RagnBoneManVEVO");
+                        case "neutral":
+                            browse("https://www.youtube.com/watch?v=xFrGuyw1V8s&ab_channel=AbbaVEVO");
+                    }
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 pt.stopSampling();
 
                 try {
@@ -117,6 +143,14 @@ public class VoiceTest {
             }
 
 
+    }
+
+    private void browse(String url) throws URISyntaxException, IOException {
+        Desktop desktop =Desktop.getDesktop();
+        if (Desktop.isDesktopSupported() && desktop.isSupported(Desktop.Action.BROWSE)){
+            URI uri = new URI(url);
+            desktop.browse(uri);
+        }
     }
 
     /*
