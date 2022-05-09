@@ -2,22 +2,42 @@ package com.zhangxin.jarvis;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
-import com.microsoft.azure.cognitiveservices.vision.faceapi.FaceAPI;
-import com.microsoft.azure.cognitiveservices.vision.faceapi.FaceAPIManager;
 import com.microsoft.azure.cognitiveservices.vision.faceapi.models.DetectedFace;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.zhangxin.jarvis.EmotionDetection.detectFaces;
 import static java.lang.Thread.sleep;
 
-public class pictureTest {
+public class PictureTest extends Thread {
+
+    @Override
+    public void run() {
+        try {
+            this.startSmpling();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ArrayList<String> emotions= new ArrayList<String>(){
+        {
+            add("neutral");
+            add("anger");
+            add("disgust");
+            add("contempt");
+            add("fear");
+            add("sadness");
+            add("surprise");
+            add("happiness");
+        }
+    };
     public boolean activeSampling = true;
     public int samplingTime= 5;
     public Webcam webcam ;
@@ -37,14 +57,12 @@ public class pictureTest {
         webcam.setCustomViewSizes(nonStandardResolutions);
         webcam.setViewSize(new Dimension(camera_w, camera_h));
         webcam.open();
+        for (String emotion:
+             emotions) {
+
+            emotionsAverage.put(emotion, 0.0);
+        }
         emotionsAverage.put("neutral",1.0);
-        emotionsAverage.put("anger", 0.0);
-        emotionsAverage.put("disgust", 0.0);
-        emotionsAverage.put("contempt",0.0);
-        emotionsAverage.put("fear", 0.0);
-        emotionsAverage.put("sadness", 0.0);
-        emotionsAverage.put("surprise",0.0);
-        emotionsAverage.put("happiness", 0.0);
 
     }
     public void closeCamera(){
@@ -79,7 +97,17 @@ public class pictureTest {
         closeCamera();
     }
     public String getEmotion(){
-        return "hi"; //returns the max emotion
+        Double maxvalue = 0.0;
+        String dominatingEmotion = "";
+        for (String emotion: emotions
+             ) {
+            if(maxvalue< emotionsAverage.get(emotion)){
+                maxvalue=emotionsAverage.get(emotion);
+                dominatingEmotion = emotion;
+            }
+
+        }
+        return dominatingEmotion;
     }
     public static void main(String[] args) throws IOException {
         //ImageIO.write(webcam.getImage(), "PNG", new File("hello-world.png"));

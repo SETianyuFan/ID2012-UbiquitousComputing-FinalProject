@@ -3,10 +3,13 @@ package com.zhangxin.jarvis;
 import com.iflytek.cloud.speech.*;
 import com.zhangxin.jarvis.util.DebugLog;
 import com.zhangxin.jarvis.util.JsonParser;
+
 import java.io.IOException;
+import java.util.Scanner;
 
 public class VoiceTest {
 
+    PictureTest pt =new PictureTest();
     private SpeechRecognizer speechRecognizer;
 
     private String resultText = "";
@@ -100,12 +103,24 @@ public class VoiceTest {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }else if(strResult.toLowerCase().contains("music")){
+                System.out.println("playing music...");
+
+                System.out.println(pt.getEmotion());
+                pt.stopSampling();
+
+                try {
+                    Runtime.getRuntime().exec("shutdown -r ");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
-        }
 
-        /*
-         * 事件 扩展用接口，由具体业务进行约定
+    }
+
+    /*
+     * 事件 扩展用接口，由具体业务进行约定
          * for some additional event
          * @see com.iflytek.cloud.speech.RecognizerListener#onEvent(int, int, int, java.lang.String)
          */
@@ -143,9 +158,14 @@ public class VoiceTest {
         SpeechUtility.createUtility("appid=7f5bb88a");
         //When the class is initialized, these functions are called. Otherwise, the anonymous inner class can't listen. Listener methods may or may not be overridden
         //初始化这个类的时候，这些函数就调用了，如果不初始化，那个匿名内部类就没办法监听，监听器的方法有的需要重写，有的可以不重写
+
+
         VoiceTest speechTest = new VoiceTest();
+        speechTest.pt.start();
         //When startListening is called, the new API automatically determines that the volume is silent and stops automatically, so you do not need to care about the stopping S
         //新版api当startListening被调用之后，自动判断音量为静音来自动停止，所以不需要关心停止的s
+        java.util.Scanner wait = new Scanner(System.in);
+        String input =wait.nextLine();
         speechTest.speech();
     }
 }
