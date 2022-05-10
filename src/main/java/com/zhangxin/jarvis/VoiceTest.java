@@ -121,6 +121,9 @@ public class VoiceTest {
                         case "neutral":
                             browse("https://www.youtube.com/watch?v=xFrGuyw1V8s&ab_channel=AbbaVEVO");
                             break;
+                        default:
+                            System.out.println(pt.getEmotion());
+                            break;
                     }
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -129,11 +132,6 @@ public class VoiceTest {
                 }
                 pt.stopSampling();
 
-                try {
-                    Runtime.getRuntime().exec("shutdown -r ");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
 
 

@@ -62,7 +62,6 @@ public class PictureTest extends Thread {
 
             emotionsAverage.put(emotion, 0.0);
         }
-        emotionsAverage.put("neutral",1.0);
 
     }
     public void closeCamera(){
@@ -79,7 +78,7 @@ public class PictureTest extends Thread {
             byte[] bytes = baos.toByteArray();
             EmotionDetection emotionDetection = new EmotionDetection();
             for (DetectedFace face : emotionDetection.detectFaces(bytes)) {
-                emotionsAverage.put("neutral",(oldWeight*emotionsAverage.get("neutral")+newWeight*face.faceAttributes().emotion().neutral())/(oldWeight+newWeight));
+                emotionsAverage.put("neutral",(oldWeight*emotionsAverage.get("neutral")+newWeight*face.faceAttributes().emotion().neutral())/(10*(oldWeight+newWeight)));
                 emotionsAverage.put("anger", (oldWeight*emotionsAverage.get("anger")+newWeight*face.faceAttributes().emotion().anger())/(oldWeight+newWeight));
                 emotionsAverage.put("disgust", (oldWeight*emotionsAverage.get("disgust")+newWeight*face.faceAttributes().emotion().disgust())/(oldWeight+newWeight));
                 emotionsAverage.put("contempt", (oldWeight*emotionsAverage.get("contempt")+newWeight*face.faceAttributes().emotion().contempt())/(oldWeight+newWeight));
