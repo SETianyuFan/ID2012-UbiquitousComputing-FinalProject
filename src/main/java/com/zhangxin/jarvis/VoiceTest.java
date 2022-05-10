@@ -92,41 +92,35 @@ public class VoiceTest {
             }
 
             // for shut down the computer
-            if(strResult.contains("关机")||strResult.contains("关闭电脑")){
-                System.out.println("正在关机...");
-                try {
-                    Runtime.getRuntime().exec("shutdown /s /t " + 1);  //关机时间可以自动设置
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else if(strResult.contains("重启")||strResult.contains("重新启动")){
-                System.out.println("正在重启...");
-                try {
-                    Runtime.getRuntime().exec("shutdown -r ");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else if(strResult.toLowerCase().contains("music")){
+            if(strResult.toLowerCase().contains("music")){
                 System.out.println("playing music...");
 
                 try {
                     switch (pt.getEmotion()){
                         case "happiness":
                             browse("https://www.youtube.com/watch?v=ZbZSe6N_BXs&ab_channel=PharrellWilliamsVEVO");
+                            break;
                         case "sadness":
                             browse("https://www.youtube.com/watch?v=Jllu94-8PxI&ab_channel=brokxn");
+                            break;
                         case "disgust":
                             browse("https://www.youtube.com/watch?v=3clqk2U3T9Y&ab_channel=SandTagious");
+                            break;
                         case "contempt":
                             browse("https://www.youtube.com/watch?v=r7qovpFAGrQ&ab_channel=LilNasXVEVO");
+                            break;
                         case "fear":
                             browse("https://www.youtube.com/watch?v=m9We2XsVZfc&ab_channel=PrestigeGhost");
+                            break;
                         case "surprised":
                             browse("https://www.youtube.com/watch?v=__LU8E6dUsI&list=RDMM&start_radio=1&rv=Y-lI_tgQMMk&ab_channel=AkademiaFilmuiTelewizjiO");
+                            break;
                         case "anger":
                             browse("https://www.youtube.com/watch?v=L3wKzyIN1yk&list=RDMM&index=5&ab_channel=RagnBoneManVEVO");
+                            break;
                         case "neutral":
                             browse("https://www.youtube.com/watch?v=xFrGuyw1V8s&ab_channel=AbbaVEVO");
+                            break;
                     }
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
